@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head>
+    <title>js-hlspray</title>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://jdataview.github.io/dist/jdataview.js"></script>
+    <script src="cropShop.js"></script>
+    <script src="RgbQuant.js"></script>
+    <script src="quantize.js"></script>
+    <script src="js-hlspray.js"></script>
+    <style>
+      h1 {
+        color: #fff;
+      }
+      body {
+        background-color: #260000;
+        padding: 0px 12px 24px 12px;
+        font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
+        font-size: 1em;
+      }
+      .section {
+        background-color: #fff;
+        padding: 12px 24px 16px 24px;
+        margin-top: 12px;
+        margin-right: 12px;
+        border-radius: 25px;
+        display: inline-block;
+        float:left;
+      }
+      .clearfix {
+        clear:both;
+      }
+      .description {
+        color: #fff;
+        font-size: .7em;
+      }
+      .button-group {
+        display: inline-block;
+      }
+      canvas {
+        border: 1px solid #000;
+        background-color: #fff;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gMDBAcgsWvbxAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAK0lEQVQoz2M8c+YMAzZgbGyMVZyJgUQwqoEYwPj//3+sEmfPnh0NJfppAABCtQiABIETHQAAAABJRU5ErkJggg==);
+        background-repeat: repeat;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JS HL Spray Converter</h1>
+    <p class="description">
+      Select an image file to export it to a halflife or counter-strike 1.6 wad spray file.
+    </p>
+    <p class="description">You can select between using
+      RgbQuant and quantize.js quantize methods. Additionally you can add a border around the spray
+      to preserve transparent backgrounds better. You can crop the selected image by draging a selection
+      in the left image in the Crop pane. Clicking 'Crop' will copy the selection from the cropped
+      selection to the spray preview.
+    </p>
+    <p class="description">In the Spray Preview pane you can zoom the spray preview, autosize
+      the spray dimensions to best fit the cropped image and manually select spray dimensions. Clicking 'Export'
+      will generate the converted wad spray file.
+    </p>
+    <div class="section">
+      <h4>Select a file</h4>
+      <input type="file" name="file" id="file-input">
+    </div>
+    <div class="section clearfix">
+      <h4>Crop</h4>
+      <div class="button-group">
+        <span style="margin-right: 10px;">
+          <canvas id="image-input"></canvas>
+        </span>
+        <span>
+          <canvas id="cropped-input"></canvas>
+        </span>
+        </div><br>
+      <div class="button-group">
+        <button id="crop" name="crop">Crop</button>
+        <div class="button-group">
+          <input type="radio" name="quant" value="rgbquant" checked="checked">
+          RgbQuant
+          <input type="radio" name="quant" value="mmcq">
+          quantize.js
+        </div>
+        <input type="checkbox" name="safe-border" checked="checked">
+        Add transparent border
+      </div>
+    </div>
+    <div class="section clearfix">
+      <h4>Spray Preview</h4>
+      <canvas id="spray-preview"></canvas><br>
+      <div class="button-group">
+        <input type="range" min="1" max="4" name="magnify" value="1">
+        <button id="autosize" name="autosize">Autosize</button>
+        <select name="canvas-size" id="canvas-size"></select>
+        <button id="export" name="export">Export</button>
+      </div>
+    </div>
+    <div class="section">
+      <h4>Palette Preview</h4>
+      <canvas id="palette-preview" width="192" height="192"></canvas>
+    </div>
+    <div class="clearfix"></div>
+
+  </body>
+</html>
