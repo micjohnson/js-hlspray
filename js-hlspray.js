@@ -14,6 +14,12 @@ var height;
 var cropshop;
 var transparentBorder;
 
+var RESIZE_BROWSER = 1;
+var RESIZE_DOWNSCALE = 2;
+var RESIZE_HERMITE = 3;
+var RESIZE_BROWSER_MULTIPLE = 4;
+var resizeMethod = RESIZE_BROWSER;
+
 var QUANTIZE_RGBQUANT = 1;
 var QUANTIZE_MMCQ = 2
 var quantizeMethod = QUANTIZE_RGBQUANT;
@@ -202,8 +208,27 @@ var drawImageToSpray = function(img) {
         offset_y += 2;
     }
 
-    context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height, offset_x, offset_y, tmpCanvas.width * ratio, tmpCanvas.height * ratio);
-    
+    if(resizeMethod == RESIZE_BROWSER || resizeMethod == RESIZE_BROWSER_MULTIPLE) {
+        
+        if(ratio < 0.5 && resizeMethod == RESIZE_BROWSER_MULTIPLE) {
+            ratio = 0.5;
+            offset_x = 0;
+            offset_y = 0;
+            var tmpCanvas2 = document.createElement('canvas');
+            tmpCanvas2.width = tmpCanvas.width * ratio;
+            tmpCanvas2.height = tmpCanvas.height * ratio;
+            tmpCanvas2.getContext('2d').drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height, offset_x, offset_y, tmpCanvas.width * ratio, tmpCanvas.height * ratio);
+            return drawImageToSpray(tmpCanvas2);
+        }
+        
+        context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height, offset_x, offset_y, tmpCanvas.width * ratio, tmpCanvas.height * ratio);
+    } else if(resizeMethod == RESIZE_DOWNSCALE) {
+        tmpCanvas = downScaleCanvas(tmpCanvas, ratio);
+        context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height, offset_x, offset_y, tmpCanvas.width, tmpCanvas.height);
+    } else {
+        resample_single(tmpCanvas, tmpCanvas.width * ratio, tmpCanvas.height * ratio, true);
+        context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height, offset_x, offset_y, tmpCanvas.width, tmpCanvas.height);
+    }
     $(tmpCanvas).remove();
     convertPalette();
 };
@@ -579,6 +604,26 @@ $(function() {
         selectBestDimension();
     });
 
-
+    $('input[name=resize]').change(function() {
+        if($('input[name=resize]:checked').val() == 'browser') {
+            resizeMethod = RESIZE_BROWSER;
+        } else if($('input[name=resize]:checked').val() == 'downscale'){
+            resizeMethod = RESIZE_DOWNSCALE;
+        } else if($('input[name=resize]:checked').val() == 'hermite'){
+            resizeMethod = RESIZE_HERMITE;
+        } else {
+            resizeMethod = RESIZE_BROWSER_MULTIPLE;
+        }
+        drawImageToSpray(croppedCanvas);
+    });
+    if($('input[name=resize]:checked').val() == 'browser') {
+        resizeMethod = RESIZE_BROWSER;
+    } else if($('input[name=resize]:checked').val() == 'downscale'){
+        resizeMethod = RESIZE_DOWNSCALE;
+    } else if($('input[name=resize]:checked').val() == 'hermite'){
+        resizeMethod = RESIZE_HERMITE;
+    } else {
+        resizeMethod = RESIZE_BROWSER_MULTIPLE;
+    }
 });
 

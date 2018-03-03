@@ -8,6 +8,8 @@
     <script src="cropShop.js"></script>
     <script src="RgbQuant.js"></script>
     <script src="quantize.js"></script>
+    <script src="downscale.js"></script>
+    <script src="hermite-resize.js"></script>
     <script src="js-hlspray.js"></script>
     <style>
       h1 {
@@ -55,9 +57,12 @@
     <p class="description">
       Select an image file to export it to a halflife or counter-strike 1.6 wad spray file.
     </p>
-    <p class="description">You can select between using
-      RgbQuant and quantize.js quantize methods. Additionally you can add a border around the spray
-      to preserve transparent backgrounds better. You can crop the selected image by draging a selection
+    <p class="description">You can select between the
+      RgbQuant and quantize.js quantize methods as well as select a resize method, some methods might suit
+      certain images better. Additionally you can add a border around the spray
+      to preserve transparent backgrounds better.
+    </p>
+    <p class="description">You can crop the selected image by draging a selection
       in the left image in the Crop pane. Clicking 'Crop' will copy the selection from the cropped
       selection to the spray preview.
     </p>
@@ -89,6 +94,16 @@
         </div>
         <input type="checkbox" name="safe-border" checked="checked">
         Add transparent border
+        <div class="button-group">
+          <input type="radio" name="resize" value="hermite">
+          hermite-downscale
+          <input type="radio" name="resize" value="downscale">
+          custom-downscale
+          <input type="radio" name="resize" value="browser-multiple" checked="checked">
+          browser-multiple
+          <input type="radio" name="resize" value="browser">
+          browser-single (worst)
+        </div>
       </div>
     </div>
     <div class="section clearfix">
