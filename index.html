@@ -9,6 +9,7 @@
     <script src="RgbQuant.js"></script>
     <script src="quantize.js"></script>
     <script src="downscale.js"></script>
+    <script src="sharpen.js"></script>
     <script src="hermite-resize.js"></script>
     <script src="js-hlspray.js"></script>
     <style>
@@ -18,7 +19,7 @@
       body {
         background-color: #260000;
         padding: 0px 12px 24px 12px;
-        font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
         font-size: 1em;
       }
       .section {
@@ -29,6 +30,10 @@
         border-radius: 25px;
         display: inline-block;
         float:left;
+      }
+      label {
+        display: inline-block;
+        margin-bottom: .5rem;
       }
       .clearfix {
         clear:both;
@@ -57,14 +62,13 @@
     <p class="description">
       Select an image file to export it to a halflife or counter-strike 1.6 wad spray file.
     </p>
-    <p class="description">You can select between the
-      RgbQuant and quantize.js quantize methods as well as select a resize method, some methods might suit
-      certain images better. Additionally you can add a border around the spray
-      to preserve transparent backgrounds better.
+    <p class="description">You can select between the RgbQuant and quantize.js quantize methods as well as select 
+      a resize method, some methods might suit certain images better. Additionally you can add a border around the spray
+      to preserve transparent backgrounds better. The sharpness filter can be applied after resizing the image.
     </p>
-    <p class="description">You can crop the selected image by draging a selection
-      in the left image in the Crop pane. Clicking 'Crop' will copy the selection from the cropped
-      selection to the spray preview.
+    <p class="description">You can crop the selected image by draging a selection in the left image in the Crop pane. Different
+    images might look better with different quantizing, resizing and sharpness settings, try a few to see which looks best. 
+    Clicking 'Crop' will copy the selection from the cropped selection to the spray preview.
     </p>
     <p class="description">In the Spray Preview pane you can zoom the spray preview, autosize
       the spray dimensions to best fit the cropped image and manually select spray dimensions. Clicking 'Export'
@@ -85,16 +89,16 @@
         </span>
         </div><br>
       <div class="button-group">
-        <button id="crop" name="crop">Crop</button>
         <div class="button-group">
+          <label for="quant">Quantize Method</label>
           <input type="radio" name="quant" value="rgbquant" checked="checked">
           RgbQuant
           <input type="radio" name="quant" value="mmcq">
           quantize.js
         </div>
-        <input type="checkbox" name="safe-border" checked="checked">
-        Add transparent border
+        <br>
         <div class="button-group">
+          <label for="resize">Resize Method</label>
           <input type="radio" name="resize" value="hermite">
           hermite-downscale
           <input type="radio" name="resize" value="downscale">
@@ -102,14 +106,26 @@
           <input type="radio" name="resize" value="browser-multiple" checked="checked">
           browser-multiple
           <input type="radio" name="resize" value="browser">
-          browser-single (worst)
+          browser-single
         </div>
+        <br>
+        <div class="button-group">
+          <label for="sharpen">Sharpness Filter</label>
+          <input type="range" min="0.0" max="1.0" name="sharpen" value="0" step="0.01">
+        </div>
+        <div class="button-group">
+          <input type="checkbox" name="safe-border" checked="checked">
+          Add transparent border
+        </div>
+        <br>
+        <button id="crop" name="crop">Crop</button>
       </div>
     </div>
     <div class="section clearfix">
       <h4>Spray Preview</h4>
       <canvas id="spray-preview"></canvas><br>
       <div class="button-group">
+        <label for="magnify">Zoom</label>
         <input type="range" min="1" max="4" name="magnify" value="1">
         <button id="autosize" name="autosize">Autosize</button>
         <select name="canvas-size" id="canvas-size"></select>

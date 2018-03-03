@@ -229,6 +229,8 @@ var drawImageToSpray = function(img) {
         resample_single(tmpCanvas, tmpCanvas.width * ratio, tmpCanvas.height * ratio, true);
         context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height, offset_x, offset_y, tmpCanvas.width, tmpCanvas.height);
     }
+    sharpen(context, sprayCanvas.width, sprayCanvas.height, $('input[name=sharpen]').val());
+
     $(tmpCanvas).remove();
     convertPalette();
 };
@@ -625,5 +627,8 @@ $(function() {
     } else {
         resizeMethod = RESIZE_BROWSER_MULTIPLE;
     }
+    $('input[name=sharpen]').change(function() {
+        drawImageToSpray(croppedCanvas);
+    });
 });
 
